@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1553976468 source:c:\users\dell\documents\tec\iii semestre\lenguajes de programación\práctica\proyectoprogramado\main.c
+	<stdio.h>
+	<stdlib.h>
+
