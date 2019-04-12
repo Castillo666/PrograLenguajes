@@ -95,6 +95,63 @@ void editarArchivo(char *direccion,FILE *file, Empleado *empleado){
     fclose(file);
     printf("\nSe edito el arhivo\n\n");
 }
+void actualizarTabla(){
+char linea[1024];
+    FILE *fich;
+
+    fich = fopen("C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt", "r");
+    int count = 0;
+    while(fgets(linea, 1024, (FILE*) fich))
+        {
+    if (count>=0){
+        printf(linea);
+        const char* word = strtok(linea,"\t");
+        int atributos = 0;
+        while(word != 0)
+            {
+            Empleado empleado;
+            Empleado *ptrEmpleado;
+            ptrEmpleado = &empleado;
+
+            int *idE = &contadorEmpleados;
+
+            char *nombre = (char*) malloc (sizeof (char));
+            char *apellido = (char*) malloc (sizeof (char));
+            char *departamento = (char*) malloc (sizeof (char));
+
+                ptrEmpleado->id = *idE;
+                ptrEmpleado->nombre = nombre;
+                ptrEmpleado->apellido = apellido;
+                ptrEmpleado->departamento = departamento;
+
+            if (atributos == 0){
+                 printf("ID: %s\n",word);
+                 int idE = word;
+                 ptrEmpleado ->id = idE;
+            }
+            if (atributos == 1){
+                 printf("Nombre: %s\n",word);
+                 ptrEmpleado->nombre = word;
+            }
+            if (atributos == 2){
+                 printf("Apellido: %s\n",word);
+                 ptrEmpleado->apellido = word;
+            }
+            if (atributos == 3){
+                 printf("Departamento: %s\n",word);
+                  ptrEmpleado->departamento = word;
+            }
+            atributos++;
+            agregarEmpleado(ptrEmpleado);
+            contadorEmpleados++;
+            word = strtok(NULL," \t");
+            }
+        }
+        count++;
+    }
+    fclose(fich);
+}
+
 
 int main(){
     crearArchivo(direccionE,ArchivoEmpleado);
