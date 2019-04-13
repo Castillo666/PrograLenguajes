@@ -6,9 +6,9 @@ FILE *ArchivoEmpleado;   //Archivo que almacena la informacion de los empleados
 FILE *ArchivoProyecto;   //Archivo que almacena la informacion del Proyecto
 FILE *ArchivoActividad;  //Archivo que almacena la informacion de las Actividades
 
-char *direccionE = "C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
-//char *dirrecionP = "C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
-//char *direccionA = "C:\\Users\\Dell\\Documents\\actividades.txt";   //Archivo que almacena el archivo de las actividades
+char *direccionE = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
+char *dirrecionP = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
+char *direccionA = "C:\\Users\\marip\\Desktop\\actividades.txt";   //Archivo que almacena el archivo de las actividades
 
 int contadorEmpleados = 1;
 int contadorProyectos = 1;
@@ -31,10 +31,11 @@ typedef struct actividad{
     int *id;
     char *descripcion;
     int *porcentaje;
+    int *idProyecto;
 }Actividad;
 
 typedef struct listaActvidades{
-    Actividad* actividad;
+    Actividad actividad;
     struct listaActvidades * sig;
 }nodoActividad;
 
@@ -44,7 +45,6 @@ typedef struct proyecto{
     int *inicio;
     int *fin;
     nodoEmpleado empleados;
-    nodoActividad actividades;
 }Proyecto;
 
 typedef struct listaProyectos{
@@ -53,6 +53,7 @@ typedef struct listaProyectos{
 
 
 nodoEmpleado *cabezaEmpleado = NULL;
+nodoActividad *cabezaActivdad = NULL;
 
 void agregarEmpleado(Empleado* entrante){
     nodoEmpleado *nuevo = (nodoEmpleado *)malloc(sizeof(nodoEmpleado));
@@ -71,6 +72,25 @@ void agregarEmpleado(Empleado* entrante){
         cabezaEmpleado = nuevo;
      }
 }
+
+void agregarActividad(Actividad* entrante){
+    nodoActividad *nuevo = (nodoActividad *)malloc(sizeof(nodoEmpleado));
+
+     nuevo->actividad.id = entrante->id;
+     nuevo->actividad.descripcion = entrante->descripcion;
+     nuevo->actividad.porcentaje = entrante->porcentaje;
+     nuevo->actividad.idProyecto = entrante->idProyecto;
+
+     if(cabezaActivdad == NULL){
+        cabezaActivdad = nuevo;
+        cabezaActivdad->sig = NULL;
+     }
+     else{
+        nuevo->sig = cabezaActivdad;
+        cabezaActivdad = nuevo;
+     }
+}
+
 void imprimirEmpleados(nodoEmpleado* cab){
     nodoEmpleado* actual = cab;
     while(actual != NULL){
@@ -89,12 +109,21 @@ void crearArchivo(char direccion[], FILE *file){     //crea archivo de texto rec
     }
 }
 
-void editarArchivo(char *direccion,FILE *file, Empleado *empleado){
+void editarArchivoEmpleado(char *direccion,FILE *file, Empleado *empleado){
     file = fopen(direccion,"a");
     fprintf(file,"%d\t%s\t%s\t%s\n",empleado->id,empleado->nombre,empleado->apellido,empleado->departamento);
     fclose(file);
     printf("\nSe edito el arhivo\n\n");
 }
+
+void editarArchivoActividad(char *direccion,FILE *file, Actividad *actividad){
+    file = fopen(direccion,"a");
+    fprintf(file,"%d\t%s\t%d\t%d\n",actividad->id,actividad->descripcion,actividad->porcentaje,actividad->idProyecto);
+    fclose(file);
+    printf("\nSe edito el arhivo\n\n");
+}
+
+
 void actualizarTabla(){
 char linea[1024];
     FILE *fich;
@@ -150,8 +179,8 @@ char linea[1024];
 
 int main(){
     crearArchivo(direccionE,ArchivoEmpleado);
-   // crearArchivo(dirrecionP,ArchivoProyecto);
-    //crearArchivo(direccionA,ArchivoActividad);
+    crearArchivo(dirrecionP,ArchivoProyecto);
+    crearArchivo(direccionA,ArchivoActividad);
 
     actualizarTabla();
 
@@ -170,6 +199,7 @@ int main(){
                 "--Digite 5 si desea salir\n\n");
         printf("Respuesta:  ");
         scanf("%d",&respuesta);
+        system("cls");
 
         if(respuesta==1){
             int agregar;
@@ -178,6 +208,7 @@ int main(){
                     "--Digite 3 para agregar Actividad\n\n");
             printf("Respuesta:  ");
             scanf("%d",&agregar);
+            system("cls");
             if(agregar==1){
                 Empleado empleado;
                 Empleado *ptrEmpleado;
@@ -204,11 +235,38 @@ int main(){
 
                 agregarEmpleado(ptrEmpleado);
                 contadorEmpleados++;
-                editarArchivo(direccionE,ArchivoEmpleado,ptrEmpleado);
+                editarArchivoEmpleado(direccionE,ArchivoEmpleado,ptrEmpleado);
             }
             if(agregar=2){
             }
             if(agregar=3){
+                Actividad actividad;
+                Actividad *ptrActividad;
+                ptrActividad = &actividad;
+
+                int *idActividad = &contadorActividad;
+
+
+                char *descripcion = (char*) malloc (sizeof (char));
+                int *porcentaje = (char*) malloc (sizeof (char));
+                int *idProyecto= (char*) malloc (sizeof (char));
+
+                printf("Indique Descripcion:");
+                scanf("%s",descripcion);
+                printf("\nIndique Porcentaje:");
+                scanf("%d",porcentaje);
+                printf("\nIndique Numero de Proyecto");
+                scanf("%d",idProyecto);
+
+                ptrActividad->id = *idActividad;
+                ptrActividad->descripcion = descripcion;
+                ptrActividad->porcentaje = *porcentaje;
+                ptrActividad->idProyecto = *idProyecto;
+
+                agregarActividad(ptrActividad);
+                contadorActividad++;
+                system("cls");
+                editarArchivoActividad(direccionA,ArchivoActividad,ptrActividad);
             }
         }
         if(respuesta==2){
@@ -224,5 +282,5 @@ int main(){
             break;
         }
     }
-    return 0;
-}
+
+    }
