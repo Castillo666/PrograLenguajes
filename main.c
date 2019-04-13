@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 FILE *ArchivoEmpleado;   //Archivo que almacena la informacion de los empleados
 FILE *ArchivoProyecto;   //Archivo que almacena la informacion del Proyecto
 FILE *ArchivoActividad;  //Archivo que almacena la informacion de las Actividades
 
-char *direccionE = "C:\\Users\\Dell\\Documents\\empleados.txt";    //Archivo que almacena el archivo de los empleados
-char *dirrecionP = "C:\\Users\\Dell\\Documents\\proyectos.txt";    //Archivo que almacena el archivo de los proyectos
-char *direccionA = "C:\\Users\\Dell\\Documents\\actividades.txt";   //Archivo que almacena el archivo de las actividades
+char *direccionE = "C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
+//char *dirrecionP = "C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
+//char *direccionA = "C:\\Users\\Dell\\Documents\\actividades.txt";   //Archivo que almacena el archivo de las actividades
 
 int contadorEmpleados = 1;
 int contadorProyectos = 1;
@@ -99,64 +99,61 @@ void actualizarTabla(){
 char linea[1024];
     FILE *fich;
 
-    fich = fopen("C:\\Users\\Raquel Rojas\\Desktop\\empleados.txt", "r");
-    int count = 0;
-    while(fgets(linea, 1024, (FILE*) fich))
-        {
-    if (count>=0){
+    fich = fopen(direccionE, "r");
+
+    while(fgets(linea, 1024, (FILE*)fich)){
         printf(linea);
         const char* word = strtok(linea,"\t");
         int atributos = 0;
-        while(word != 0)
+        Empleado empleado;
+        Empleado *ptrEmpleado;
+        ptrEmpleado = &empleado;
+
+        int *idE = (int*) malloc(sizeof(int));
+        char *nombre = (char*) malloc (sizeof (char));
+        char *apellido = (char*) malloc (sizeof (char));
+        char *departamento = (char*) malloc (sizeof (char));
+
+        ptrEmpleado->id = *idE;
+        ptrEmpleado->nombre = nombre;
+        ptrEmpleado->apellido = apellido;
+        ptrEmpleado->departamento = departamento;
+        while(atributos<4)
             {
-            Empleado empleado;
-            Empleado *ptrEmpleado;
-            ptrEmpleado = &empleado;
-
-            int *idE = &contadorEmpleados;
-
-            char *nombre = (char*) malloc (sizeof (char));
-            char *apellido = (char*) malloc (sizeof (char));
-            char *departamento = (char*) malloc (sizeof (char));
-
-                ptrEmpleado->id = *idE;
-                ptrEmpleado->nombre = nombre;
-                ptrEmpleado->apellido = apellido;
-                ptrEmpleado->departamento = departamento;
-
             if (atributos == 0){
                  printf("ID: %s\n",word);
-                 int idE = word;
-                 ptrEmpleado ->id = idE;
+                 ptrEmpleado->id = atoi(word);
             }
             if (atributos == 1){
                  printf("Nombre: %s\n",word);
-                 ptrEmpleado->nombre = word;
+                 strcpy(ptrEmpleado->nombre,word);
             }
             if (atributos == 2){
                  printf("Apellido: %s\n",word);
-                 ptrEmpleado->apellido = word;
+                 strcpy(ptrEmpleado->apellido,word);
             }
             if (atributos == 3){
                  printf("Departamento: %s\n",word);
-                  ptrEmpleado->departamento = word;
+                 strcpy(ptrEmpleado->departamento,word);
             }
+
             atributos++;
-            agregarEmpleado(ptrEmpleado);
-            contadorEmpleados++;
             word = strtok(NULL," \t");
             }
-        }
-        count++;
+        agregarEmpleado(ptrEmpleado);
+        contadorEmpleados++;
     }
     fclose(fich);
 }
 
 
+
 int main(){
     crearArchivo(direccionE,ArchivoEmpleado);
-    crearArchivo(dirrecionP,ArchivoProyecto);
-    crearArchivo(direccionA,ArchivoActividad);
+   // crearArchivo(dirrecionP,ArchivoProyecto);
+    //crearArchivo(direccionA,ArchivoActividad);
+
+    actualizarTabla();
 
 
     int salir;
@@ -229,5 +226,3 @@ int main(){
     }
     return 0;
 }
-
-//helloworld
