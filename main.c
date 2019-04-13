@@ -8,7 +8,7 @@ FILE *ArchivoActividad;  //Archivo que almacena la informacion de las Actividade
 FILE *ArchivoEmpProyecto;
 
 char *direccionE = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
-char *dirrecionP = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
+char *direccionP = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
 char *direccionA = "C:\\Users\\marip\\Desktop\\actividades.txt";   //Archivo que almacena el archivo de las actividades
 char *direccionEP = "C:\\Users\\marip\\Desktop\\actividades.txt";
 
@@ -30,13 +30,13 @@ typedef struct listaEmpleados{
     struct listaEmpleados *sig;
 }nodoEmpleado;
 
-typedef struct EmpProyecto{
+typedef struct empProyecto{
     char *nombreEmpleado;
     int *idProyecto;
-} empProyecto;
+} EmpProyecto;
 
 typedef struct listaEmpProyecto{
-    EmpProyecto EmpProyecto;
+    EmpProyecto empProyecto;
     struct listaEmpProyecto *sig;
 }nodoEmpProyectos;
 
@@ -57,17 +57,18 @@ typedef struct proyecto{
     char *nombre;
     int *inicio;
     int *fin;
-    nodoEmpleado empleados;
 }Proyecto;
 
 typedef struct listaProyectos{
-
+    Proyecto proyecto;
+    struct listaProyectos * sig;
 }nodoProyectos;
 
 
 nodoEmpleado *cabezaEmpleado = NULL;
 nodoActividad *cabezaActivdad = NULL;
 nodoEmpProyectos *cabezaEmpProyecto = NULL;
+nodoProyectos *cabezaProyecto = NULL;
 
 void agregarEmpleado(Empleado* entrante){
     nodoEmpleado *nuevo = (nodoEmpleado *)malloc(sizeof(nodoEmpleado));
@@ -105,7 +106,7 @@ void agregarActividad(Actividad* entrante){
      }
 }
 
-void agregarEmpProyecto(){
+void agregarEmpProyecto(EmpProyecto* entrante){
     nodoEmpProyectos *nuevo = (nodoEmpProyectos *)malloc(sizeof(nodoEmpProyectos));
 
      nuevo->empProyecto.nombreEmpleado = entrante->nombreEmpleado;
@@ -120,6 +121,23 @@ void agregarEmpProyecto(){
         nuevo->sig = cabezaEmpProyecto;
         cabezaEmpProyecto = nuevo;
      }
+}
+
+void agregarProyecto(Proyecto* entranteP){
+    nodoProyectos *nuevoP = (nodoProyectos *)malloc(sizeof(nodoProyectos));
+
+    nuevoP->proyecto.id = entranteP->id;
+    nuevoP->proyecto.nombre = entranteP->nombre;
+    nuevoP->proyecto.inicio = entranteP->inicio;
+    nuevoP->proyecto.fin = entranteP->fin;
+
+    if(cabezaProyecto == NULL){
+        cabezaProyecto = nuevoP;
+        cabezaProyecto-> sig = NULL;
+    } else  {
+        nuevoP->sig = cabezaProyecto;
+        cabezaProyecto = nuevoP;
+    }
 }
 
 void imprimirEmpleados(nodoEmpleado* cab){
@@ -159,6 +177,14 @@ void editarArchivoEmpProyecto(char *direccion,FILE *file, EmpProyecto *empProyec
     fprintf(file,"%s\t%d\n",empProyecto->nombreEmpleado,empProyecto->idProyecto);
     fclose(file);
     printf("\nSe edito el arhivo\n\n");
+}
+
+void editarArchivoProyecto(char *direccion, FILE *file, Proyecto *proyecto){
+    file = fopen(direccion,"a");
+    fprintf(file,"%d\t%s\t%d\t%d\n",proyecto->id,proyecto->nombre, proyecto->inicio, proyecto->fin);
+    fclose(file);
+    printf("\nSe edito el archivo\n\n");
+
 }
 
 
@@ -217,8 +243,9 @@ char linea[1024];
 
 int main(){
     crearArchivo(direccionE,ArchivoEmpleado);
-    crearArchivo(dirrecionP,ArchivoProyecto);
+    crearArchivo(direccionP,ArchivoProyecto);
     crearArchivo(direccionA,ArchivoActividad);
+    crearArchivo(direccionEP,ArchivoEmpProyecto);
 
     actualizarTabla();
 
@@ -247,6 +274,7 @@ int main(){
             printf("Respuesta:  ");
             scanf("%d",&agregar);
             system("cls");
+
             if(agregar==1){
                 Empleado empleado;
                 Empleado *ptrEmpleado;
@@ -276,26 +304,61 @@ int main(){
                 editarArchivoEmpleado(direccionE,ArchivoEmpleado,ptrEmpleado);
             }
             if(agregar=2){
+                if (contadorEmpleados >2){
+                    Proyecto proyecto;
+                    Proyecto *ptrProyecto;
+                    ptrProyecto = &proyecto;
 
-                //Agrega el empleado en el nuevo txt
-                EmpProyecto empProyecto;
-                EmpProyecto *ptrEmpProyecto;
-                ptrEmpProyecto= &empProyecto;
+                    int *idProyecto = &contadorProyectos;
 
-                int *idEmpP = &contadorEmpP;
+                    char *nombre = (char*) malloc (sizeof (char));
+                    int *inicio = (int*) malloc (sizeof (int));
+                    int *fin = (int*) malloc (sizeof (int));
+                    char *nombreEmpleado = (char*) malloc (sizeof(char));
+                    int contador = 1;
+                    int cantidad;
+
+                    printf("Indique Nombre del proyecto: ");
+                    scanf("%s",nombre);
+                    printf("\nIndique el ano de inicio: ");
+                    scanf("%d",inicio);
+                    printf("\nIndique el ano de finalizacion: ");
+                    scanf("%d" ,fin);
+                    printf("\nIndique la cantidad de empleados: ");
+                    scanf("%d", cantidad);
+
+                    ptrProyecto->id = *idProyecto;
+                    ptrProyecto->nombre = nombre;
+                    ptrProyecto->inicio = *inicio;
+                    ptrProyecto->fin = *fin;
+                    editarArchivoProyecto(direccionP,ArchivoProyecto,ptrProyecto);
+
+                    agregarProyecto(ptrProyecto);
+
+                    while(contador <= cantidad) {
+
+                    printf("\nIndique el nombre del empleado");
+                    scanf("%s",nombreEmpleado);
+
+                    EmpProyecto empProyecto;
+                    EmpProyecto *ptrEmpProyecto;
+                    ptrEmpProyecto= &empProyecto;
+
+                    int *idEmpP = &contadorEmpP;
 
 
-                ptrActividad->id = *idActividad;
-                ptrActividad->descripcion = descripcion;
-                ptrActividad->porcentaje = *porcentaje;
-                ptrActividad->idProyecto = *idProyecto;
+                    ptrEmpProyecto->nombreEmpleado = nombreEmpleado;
+                    ptrEmpProyecto->idProyecto = *idProyecto;
 
-                agregarEmpProyecto(ptrEmpProyecto);
-                contadorEmpP++;
-                system("cls");
-                editarArchivoEmpProyecto(direccionEP,ArchivoEmpProyecto,ptrEmpProyecto);
+
+                    agregarEmpProyecto(ptrEmpProyecto);
+                    contadorEmpP++;
+                    system("cls");
+                    editarArchivoEmpProyecto(direccionEP,ArchivoEmpProyecto,ptrEmpProyecto);
             }
-
+            } else{
+                printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
+            }
             }
             if(agregar=3){
                 Actividad actividad;
