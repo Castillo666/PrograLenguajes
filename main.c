@@ -7,10 +7,10 @@ FILE *ArchivoProyecto;   //Archivo que almacena la informacion del Proyecto
 FILE *ArchivoActividad;  //Archivo que almacena la informacion de las Actividades
 FILE *ArchivoEmpProyecto;
 
-char *direccionE = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
-char *direccionP = "C:\\Users\\marip\\Desktop\\proyectos.txt";    //Archivo que almacena el archivo de los proyectos
-char *direccionA = "C:\\Users\\marip\\Desktop\\actividades.txt";   //Archivo que almacena el archivo de las actividades
-char *direccionEP = "C:\\Users\\marip\\Desktop\\empleadosProyectos.txt";
+char *direccionE = "C:\\Users\\Dell\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
+char *direccionP = "C:\\Users\\Dell\\Desktop\\proyectos.txt";    //Archivo que almacena el archivo de los proyectos
+char *direccionA = "C:\\Users\\Dell\\Desktop\\actividades.txt";   //Archivo que almacena el archivo de las actividades
+char *direccionEP = "C:\\Users\\Dell\\Desktop\\empleadosProyectos.txt";
 
 int contadorEmpleados = 1;
 int contadorProyectos = 1;
@@ -303,8 +303,8 @@ int main(){
                 contadorEmpleados++;
                 editarArchivoEmpleado(direccionE,ArchivoEmpleado,ptrEmpleado);
             }
-            if(agregar=2){
-               // if (contadorEmpleados >2){
+            if(agregar==2){
+               if (contadorEmpleados >2){
                     Proyecto proyecto;
                     Proyecto *ptrProyecto;
                     ptrProyecto = &proyecto;
@@ -315,7 +315,7 @@ int main(){
                     int *inicio = (int*) malloc (sizeof (int));
                     int *fin = (int*) malloc (sizeof (int));
                     char *nombreEmpleado = (char*) malloc (sizeof(char));
-                    int contador;
+                    int contador =0;
                     int cantidad;
 
                     printf("Indique Nombre del proyecto: ");
@@ -325,7 +325,7 @@ int main(){
                     printf("\nIndique el ano de finalizacion: ");
                     scanf("%d" ,fin);
                     printf("\nIndique la cantidad de empleados: ");
-                    scanf("%d", cantidad);
+                    scanf("%d", &cantidad);
 
                     ptrProyecto->id = *idProyecto;
                     ptrProyecto->nombre = nombre;
@@ -337,7 +337,7 @@ int main(){
 
                     while(contador <= cantidad) {
 
-                    printf("\nIndique el nombre del empleado");
+                    printf("\nIndique el nombre del empleado: ");
                     scanf("%s",nombreEmpleado);
 
                     EmpProyecto empProyecto;
@@ -346,10 +346,10 @@ int main(){
                     ptrEmpProyecto->nombreEmpleado = nombreEmpleado;
                     ptrEmpProyecto->idProyecto = *idProyecto;
 
-                    nodoEmpleado* actual = (nodoEmpleado*) malloc (sizeof(nodoEmpleado));
+                    nodoEmpleado* actual;
                         actual = cabezaEmpleado;
-                        int encontrado = 0;
-                            while(actual != NULL && encontrado !=1){
+                        int encontrado;
+                            while(actual != NULL && encontrado!=1){
                                 if (actual->empleado.nombre == nombreEmpleado){
                                     printf("\n El empleado con el nombre (%s) existe", nombreEmpleado);
                                     agregarEmpProyecto(ptrEmpProyecto);
@@ -358,16 +358,18 @@ int main(){
                                     contador++;
                                     encontrado = 1;
                                     }
-                                    actual = actual.sig;
+                                    actual = actual->sig;
                             }
                         if (encontrado == 0){
                             printf("\n Empleado no encontrado");
-            }
-          //  } else{
-            //    printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
-        //}
-            }
-            if(agregar=3){
+                        }
+           }} else{
+                printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
+        }
+               }
+
+
+            if(agregar==3){
                 Actividad actividad;
                 Actividad *ptrActividad;
                 ptrActividad = &actividad;
@@ -410,5 +412,5 @@ int main(){
             break;
         }
     }
+}
 
-    }
