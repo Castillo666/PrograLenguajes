@@ -343,15 +343,25 @@ int main(){
                     EmpProyecto empProyecto;
                     EmpProyecto *ptrEmpProyecto;
                     ptrEmpProyecto= &empProyecto;
-
                     ptrEmpProyecto->nombreEmpleado = nombreEmpleado;
                     ptrEmpProyecto->idProyecto = *idProyecto;
 
-
-                    agregarEmpProyecto(ptrEmpProyecto);
-                    contador++;
-                    system("cls");
-                    editarArchivoEmpProyecto(direccionEP,ArchivoEmpProyecto,ptrEmpProyecto);
+                    nodoEmpleado* actual = (nodoEmpleado*) malloc (sizeof(nodoEmpleado));
+                        actual = cabezaEmpleado;
+                        int encontrado = 0;
+                            while(actual != NULL && encontrado !=1){
+                                if (actual->empleado.nombre == nombreEmpleado){
+                                    printf("\n El empleado con el nombre (%s) existe", nombreEmpleado);
+                                    agregarEmpProyecto(ptrEmpProyecto);
+                                    system("cls");
+                                    editarArchivoEmpProyecto(direccionEP,ArchivoEmpProyecto,ptrEmpProyecto);
+                                    contador++;
+                                    encontrado = 1;
+                                    }
+                                    actual = actual.sig;
+                            }
+                        if (encontrado == 0){
+                            printf("\n Empleado no encontrado");
             }
           //  } else{
             //    printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
