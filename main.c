@@ -8,9 +8,9 @@ FILE *ArchivoActividad;  //Archivo que almacena la informacion de las Actividade
 FILE *ArchivoEmpProyecto;
 
 char *direccionE = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los empleados
-char *direccionP = "C:\\Users\\marip\\Desktop\\empleados.txt";    //Archivo que almacena el archivo de los proyectos
+char *direccionP = "C:\\Users\\marip\\Desktop\\proyectos.txt";    //Archivo que almacena el archivo de los proyectos
 char *direccionA = "C:\\Users\\marip\\Desktop\\actividades.txt";   //Archivo que almacena el archivo de las actividades
-char *direccionEP = "C:\\Users\\marip\\Desktop\\actividades.txt";
+char *direccionEP = "C:\\Users\\marip\\Desktop\\empleadosProyectos.txt";
 
 int contadorEmpleados = 1;
 int contadorProyectos = 1;
@@ -304,7 +304,7 @@ int main(){
                 editarArchivoEmpleado(direccionE,ArchivoEmpleado,ptrEmpleado);
             }
             if(agregar=2){
-                if (contadorEmpleados >2){
+               // if (contadorEmpleados >2){
                     Proyecto proyecto;
                     Proyecto *ptrProyecto;
                     ptrProyecto = &proyecto;
@@ -315,7 +315,7 @@ int main(){
                     int *inicio = (int*) malloc (sizeof (int));
                     int *fin = (int*) malloc (sizeof (int));
                     char *nombreEmpleado = (char*) malloc (sizeof(char));
-                    int contador = 1;
+                    int contador;
                     int cantidad;
 
                     printf("Indique Nombre del proyecto: ");
@@ -344,21 +344,18 @@ int main(){
                     EmpProyecto *ptrEmpProyecto;
                     ptrEmpProyecto= &empProyecto;
 
-                    int *idEmpP = &contadorEmpP;
-
-
                     ptrEmpProyecto->nombreEmpleado = nombreEmpleado;
                     ptrEmpProyecto->idProyecto = *idProyecto;
 
 
                     agregarEmpProyecto(ptrEmpProyecto);
-                    contadorEmpP++;
+                    contador++;
                     system("cls");
                     editarArchivoEmpProyecto(direccionEP,ArchivoEmpProyecto,ptrEmpProyecto);
             }
-            } else{
-                printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
-            }
+          //  } else{
+            //    printf("\n Se necesitan al menos 2 empleados previamente registrados para inserta un proyecto");
+        //}
             }
             if(agregar=3){
                 Actividad actividad;
