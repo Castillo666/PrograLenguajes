@@ -238,6 +238,7 @@ int main(){
                 editarArchivoEmpleado(direccionE,ArchivoEmpleado,ptrEmpleado);
             }
             if(agregar=2){
+
             }
             if(agregar=3){
                 Actividad actividad;
